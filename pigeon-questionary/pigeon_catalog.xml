@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdmo xmlns:dc="http://purl.org/dc/elements/1.1/" required="2.1.0" version="2.4.0">
+
+    <section dc:uri="https://kit.edu/terms/sections/pigeon_publication_settings">
+        <uri_prefix>https://kit.edu/terms</uri_prefix>
+        <uri_path>pigeon_publication_settings</uri_path>
+        <key>pigeon_publication_settings</key>
+        <dc:title xml:lang="en">Publication Target</dc:title>
+        <questionsets>
+            <questionset dc:uri="https://kit.edu/terms/questions/target_platform_set" order="0"/>
+        </questionsets>
+    </section>
+
+    <section dc:uri="https://kit.edu/terms/sections/pigeon_instruments">
+        <uri_prefix>https://kit.edu/terms</uri_prefix>
+        <uri_path>pigeon_instruments</uri_path>
+        <key>pigeon_instruments</key>
+        <dc:title xml:lang="en">Instrument Identification</dc:title>
+        <questionsets>
+            <questionset dc:uri="https://kit.edu/terms/questions/pidinst_set" order="0"/>
+        </questionsets>
+    </section>
+
+    <catalog dc:uri="https://kit.edu/terms/questions/pigeon_oep">
+        <uri_prefix>https://kit.edu/terms</uri_prefix>
+        <uri_path>pigeon_oep</uri_path>
+        <key>pigeon_oep</key>
+        <dc:title xml:lang="en">Pigeon: OEP Publication Catalog</dc:title>
+        <sections>
+            <section dc:uri="https://kit.edu/terms/sections/pigeon_publication_settings" order="0"/>
+            <section dc:uri="https://kit.edu/terms/sections/pigeon_instruments" order="1"/>
+        </sections>
+    </catalog>
+
+</rdmo>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdmo xmlns:dc="http://purl.org/dc/elements/1.1/" created="2026-06-12T12:10:00.000000+02:00" required="2.1.0" version="2.4.0">
+
+    <question dc:uri="https://kit.edu/terms/questions/target_platform">
+        <uri_prefix>https://kit.edu/terms</uri_prefix>
+        <uri_path>target_platform</uri_path>
+        <key>target_platform</key>
+        <text xml:lang="en">Target Repository</text>
+        <help xml:lang="en">Select where Pigeon should upload your data.</help>
+        <attribute dc:uri="https://kit.edu/terms/domain/project/dataset/publication/platform" />
+        <widget_type>select</widget_type>
+        <value_type>text</value_type>
+        <optionsets>
+            <optionset dc:uri="https://kit.edu/terms/options/publication_platforms"/>
+        </optionsets>
+    </question>
+
+    <question dc:uri="https://kit.edu/terms/questions/pidinst_identifier">
+        <uri_prefix>https://kit.edu/terms</uri_prefix>
+        <uri_path>pidinst_identifier</uri_path>
+        <key>pidinst_identifier</key>
+        <text xml:lang="en">Instrument PID (PIDinst)</text>
+        <help xml:lang="en">Enter the persistent identifier for the instrument used (e.g., DOI or Handle).</help>
+        <attribute dc:uri="https://kit.edu/terms/domain/project/dataset/instrument/pidinst" />
+        <widget_type>text</widget_type>
+        <value_type>text</value_type>
+    </question>
+
+    <questionset dc:uri="https://kit.edu/terms/questions/target_platform_set">
+        <uri_prefix>https://kit.edu/terms</uri_prefix>
+        <uri_path>target_platform_set</uri_path>
+        <key>target_platform_set</key>
+        <dc:title xml:lang="en">Target Platform Settings</dc:title>
+        <is_collection>False</is_collection>
+        <questions>
+            <question dc:uri="https://kit.edu/terms/questions/target_platform" order="0"/>
+        </questions>
+    </questionset>
+
+    <questionset dc:uri="https://kit.edu/terms/questions/pidinst_set">
+        <uri_prefix>https://kit.edu/terms</uri_prefix>
+        <uri_path>pidinst_set</uri_path>
+        <key>pidinst_set</key>
+        <dc:title xml:lang="en">PIDinst Reference</dc:title>
+        <is_collection>True</is_collection>
+        <questions>
+            <question dc:uri="https://kit.edu/terms/questions/pidinst_identifier" order="0"/>
+        </questions>
+    </questionset>
+
+    <section dc:uri="https://kit.edu/terms/sections/pigeon_publication_settings">
+        <uri_prefix>https://kit.edu/terms</uri_prefix>
+        <uri_path>pigeon_publication_settings</uri_path>
+        <key>pigeon_publication_settings</key>
+        <dc:title xml:lang="en">Publication Target</dc:title>
+        <questionsets>
+            <questionset dc:uri="https://kit.edu/terms/questions/target_platform_set" order="0"/>
+        </questionsets>
+    </section>
+
+    <section dc:uri="https://kit.edu/terms/sections/pigeon_instruments">
+        <uri_prefix>https://kit.edu/terms</uri_prefix>
+        <uri_path>pigeon_instruments</uri_path>
+        <key>pigeon_instruments</key>
+        <dc:title xml:lang="en">Instrument Identification</dc:title>
+        <questionsets>
+            <questionset dc:uri="https://kit.edu/terms/questions/pidinst_set" order="0"/>
+        </questionsets>
+    </section>
+</rdmo>

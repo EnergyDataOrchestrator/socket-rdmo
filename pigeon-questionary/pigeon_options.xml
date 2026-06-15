@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdmo xmlns:dc="http://purl.org/dc/elements/1.1/" created="2026-06-12T11:00:00.000000+02:00" required="2.1.0" version="2.4.0">
+
+    <optionset dc:uri="https://kit.edu/terms/options/publication_platforms">
+        <uri_prefix>https://kit.edu/terms</uri_prefix>
+        <uri_path>publication_platforms</uri_path>
+        <key>publication_platforms</key>
+        <dc:title xml:lang="en">Pigeon Target Platforms</dc:title>
+        <dc:title xml:lang="de">Pigeon Zielplattformen</dc:title>
+        <dc:description xml:lang="en">List of repositories supported by the Pigeon automation tool.</dc:description>
+        <provider_key></provider_key>
+        <options>
+            <option dc:uri="https://kit.edu/terms/options/platform_oep" order="0"/>
+            <option dc:uri="https://kit.edu/terms/options/platform_zenodo_test" order="1"/>
+            <option dc:uri="https://kit.edu/terms/options/platform_internal" order="2"/>
+        </options>
+        <conditions/>
+    </optionset>
+
+    <option dc:uri="https://kit.edu/terms/options/platform_oep">
+        <uri_prefix>https://kit.edu/terms</uri_prefix>
+        <uri_path>platform_oep</uri_path>
+        <key>platform_oep</key>
+        <path>platform_oep</path>
+        <order>0</order>
+        <dc:title xml:lang="en">Open Energy Platform (OEP)</dc:title>
+        <help xml:lang="en">Publish to the OEP using the OEMetadata schema.</help>
+        <text xml:lang="en">oep</text>
+        <additional_input/>
+    </option>
+
+    <option dc:uri="https://kit.edu/terms/options/platform_zenodo_test">
+        <uri_prefix>https://kit.edu/terms</uri_prefix>
+        <uri_path>platform_zenodo_test</uri_path>
+        <key>platform_zenodo_test</key>
+        <path>platform_zenodo_test</path>
+        <order>1</order>
+        <dc:title xml:lang="en">Zenodo (Sandbox)</dc:title>
+        <help xml:lang="en">Use for testing publication workflows without making data public.</help>
+        <text xml:lang="en">zenodo_sandbox</text>
+        <additional_input/>
+    </option>
+
+    <option dc:uri="https://kit.edu/terms/options/platform_internal">
+        <uri_prefix>https://kit.edu/terms</uri_prefix>
+        <uri_path>platform_internal</uri_path>
+        <key>platform_internal</key>
+        <path>platform_internal</path>
+        <order>2</order>
+        <dc:title xml:lang="en">Internal Research Repository</dc:title>
+        <help xml:lang="en">Archive the dataset internally at KIT/HMC.</help>
+        <text xml:lang="en">internal</text>
+        <additional_input/>
+    </option>
+</rdmo>

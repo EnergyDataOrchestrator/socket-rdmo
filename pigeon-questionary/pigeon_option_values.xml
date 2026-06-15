@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdmo xmlns:dc="http://purl.org/dc/elements/1.1/">
+    <option dc:uri="https://kit.edu/terms/options/platform_oep">
+        <uri_prefix>https://kit.edu/terms</uri_prefix>
+        <uri_path>options/platform_oep</uri_path>
+        <key>platform_oep</key>
+        <path>platform_oep</path>
+        <optionset dc:uri="https://kit.edu/terms/options/publication_platforms"/>
+        <order>0</order>
+        <title xml:lang="en">Open Energy Platform (OEP)</title>
+        <help xml:lang="en">Publish to the OEP using the OEMetadata schema.</help>
+        <text xml:lang="en">oep</text>
+    </option>
+
+    <option dc:uri="https://kit.edu/terms/options/platform_zenodo_test">
+        <uri_prefix>https://kit.edu/terms</uri_prefix>
+        <uri_path>options/platform_zenodo_test</uri_path>
+        <key>platform_zenodo_test</key>
+        <path>platform_zenodo_test</path>
+        <optionset dc:uri="https://kit.edu/terms/options/publication_platforms"/>
+        <order>1</order>
+        <title xml:lang="en">Zenodo (Sandbox)</title>
+        <help xml:lang="en">Use for testing publication workflows without making data public.</help>
+        <text xml:lang="en">zenodo_sandbox</text>
+    </option>
+
+    <option dc:uri="https://kit.edu/terms/options/platform_internal">
+        <uri_prefix>https://kit.edu/terms</uri_prefix>
+        <uri_path>options/platform_internal</uri_path>
+        <key>platform_internal</key>
+        <path>platform_internal</path>
+        <optionset dc:uri="https://kit.edu/terms/options/publication_platforms"/>
+        <order>2</order>
+        <title xml:lang="en">Internal Research Repository</title>
+        <help xml:lang="en">Archive the dataset internally at KIT/HMC.</help>
+        <text xml:lang="en">internal</text>
+    </option>
+</rdmo>

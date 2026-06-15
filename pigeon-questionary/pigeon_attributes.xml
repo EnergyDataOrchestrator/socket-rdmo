@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdmo xmlns:dc="http://purl.org/dc/elements/1.1/" created="2026-06-12T11:45:00.000000+02:00" required="2.1.0" version="2.4.0">
+
+    <attribute dc:uri="https://kit.edu/terms/domain/project/dataset/publication">
+        <uri_prefix>https://kit.edu/terms</uri_prefix>
+        <uri_path>domain/project/dataset/publication</uri_path>
+        <key>publication</key>
+        <parent dc:uri="https://rdmorganiser.github.io/terms/domain/project/dataset"/>
+    </attribute>
+
+    <attribute dc:uri="https://kit.edu/terms/domain/project/dataset/instrument">
+        <uri_prefix>https://kit.edu/terms</uri_prefix>
+        <uri_path>domain/project/dataset/instrument</uri_path>
+        <key>instrument</key>
+        <parent dc:uri="https://rdmorganiser.github.io/terms/domain/project/dataset"/>
+    </attribute>
+
+    <attribute dc:uri="https://kit.edu/terms/domain/project/dataset/column">
+        <uri_prefix>https://kit.edu/terms</uri_prefix>
+        <uri_path>domain/project/dataset/column</uri_path>
+        <key>column</key>
+        <parent dc:uri="https://rdmorganiser.github.io/terms/domain/project/dataset"/>
+    </attribute>
+
+    <attribute dc:uri="https://kit.edu/terms/domain/project/dataset/publication/platform">
+        <uri_prefix>https://kit.edu/terms</uri_prefix>
+        <uri_path>domain/project/dataset/publication/platform</uri_path>
+        <key>platform</key>
+        <parent dc:uri="https://kit.edu/terms/domain/project/dataset/publication"/>
+    </attribute>
+
+    <attribute dc:uri="https://kit.edu/terms/domain/project/dataset/instrument/pidinst">
+        <uri_prefix>https://kit.edu/terms</uri_prefix>
+        <uri_path>domain/project/dataset/instrument/pidinst</uri_path>
+        <key>pidinst</key>
+        <parent dc:uri="https://kit.edu/terms/domain/project/dataset/instrument"/>
+    </attribute>
+
+    <attribute dc:uri="https://kit.edu/terms/domain/project/dataset/column/name">
+        <uri_prefix>https://kit.edu/terms</uri_prefix>
+        <uri_path>domain/project/dataset/column/name</uri_path>
+        <key>name</key>
+        <parent dc:uri="https://kit.edu/terms/domain/project/dataset/column"/>
+    </attribute>
+
+    <attribute dc:uri="https://kit.edu/terms/domain/project/dataset/column/unit">
+        <uri_prefix>https://kit.edu/terms</uri_prefix>
+        <uri_path>domain/project/dataset/column/unit</uri_path>
+        <key>unit</key>
+        <parent dc:uri="https://kit.edu/terms/domain/project/dataset/column"/>
+    </attribute>
+
+    <attribute dc:uri="https://kit.edu/terms/domain/project/dataset/column/description">
+        <uri_prefix>https://kit.edu/terms</uri_prefix>
+        <uri_path>domain/project/dataset/column/description</uri_path>
+        <key>description</key>
+        <parent dc:uri="https://kit.edu/terms/domain/project/dataset/column"/>
+    </attribute>
+
+    <attribute dc:uri="https://kit.edu/terms/domain/project/dataset/column/is_about">
+        <uri_prefix>https://kit.edu/terms</uri_prefix>
+        <uri_path>domain/project/dataset/column/is_about</uri_path>
+        <key>is_about</key>
+        <parent dc:uri="https://kit.edu/terms/domain/project/dataset/column"/>
+    </attribute>
+</rdmo>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdmo xmlns:dc="http://purl.org/dc/elements/1.1/">
+	<optionset dc:uri="https://kit.edu/terms/options/publication_platforms">
+		<uri_prefix>https://kit.edu/terms</uri_prefix>
+		<uri_path>publication_platforms</uri_path>
+		<dc:comment/>
+		<provider_key/>
+		<options>
+			<option dc:uri="https://kit.edu/terms/options/platform_oep" order="0"/>
+			<option dc:uri="https://kit.edu/terms/options/platform_zenodo_test" order="1"/>
+			<option dc:uri="https://kit.edu/terms/options/platform_internal" order="2"/>
+		</options>
+		<conditions/>
+	</optionset>
+	<option dc:uri="https://kit.edu/terms/options/platform_oep">
+		<uri_prefix>https://kit.edu/terms</uri_prefix>
+		<uri_path>platform_oep</uri_path>
+		<dc:comment/>
+		<text lang="en"/>
+		<help lang="en"/>
+		<default_text lang="en"/>
+		<view_text lang="en"/>
+		<text lang="de"/>
+		<help lang="de"/>
+		<default_text lang="de"/>
+		<view_text lang="de"/>
+		<additional_input/>
+	</option>
+	<option dc:uri="https://kit.edu/terms/options/platform_zenodo_test">
+		<uri_prefix>https://kit.edu/terms</uri_prefix>
+		<uri_path>platform_zenodo_test</uri_path>
+		<dc:comment/>
+		<text lang="en"/>
+		<help lang="en"/>
+		<default_text lang="en"/>
+		<view_text lang="en"/>
+		<text lang="de"/>
+		<help lang="de"/>
+		<default_text lang="de"/>
+		<view_text lang="de"/>
+		<additional_input/>
+	</option>
+	<option dc:uri="https://kit.edu/terms/options/platform_internal">
+		<uri_prefix>https://kit.edu/terms</uri_prefix>
+		<uri_path>platform_internal</uri_path>
+		<dc:comment/>
+		<text lang="en"/>
+		<help lang="en"/>
+		<default_text lang="en"/>
+		<view_text lang="en"/>
+		<text lang="de"/>
+		<help lang="de"/>
+		<default_text lang="de"/>
+		<view_text lang="de"/>
+		<additional_input/>
+	</option>
+</rdmo>
