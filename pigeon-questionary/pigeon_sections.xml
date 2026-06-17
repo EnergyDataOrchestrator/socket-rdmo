@@ -25,7 +25,7 @@
     <question dc:uri="https://kit.edu/terms/questions/target_platform_set">
         <uri_prefix>https://kit.edu/terms</uri_prefix>
         <uri_path>target_platform_set</uri_path>
-        <attribute dc:uri="https://kit.edu/terms/domain/project/dataset/publication/platform"/>
+        <attribute dc:uri="https://kit.edu/terms/dmp/dataset/publication/platform"/>
         <text lang="en">On which platform do you plan to publish your data?</text>
         <widget_type>checkbox</widget_type>
 		<value_type>option</value_type>
@@ -58,7 +58,7 @@
     <question dc:uri="https://kit.edu/terms/questions/pidinst_set">
         <uri_prefix>https://kit.edu/terms</uri_prefix>
         <uri_path>pidinst_set</uri_path>
-        <attribute dc:uri="https://kit.edu/terms/domain/project/dataset/instrument/pidinst"/>
+        <attribute dc:uri="https://kit.edu/terms/dmp/dataset/instrument/pidinst"/>
         <text lang="en">Which instrument do you plan to use to generate your data?</text>
         <widget_type>checkbox</widget_type>
 		<widget_type>textarea</widget_type>
