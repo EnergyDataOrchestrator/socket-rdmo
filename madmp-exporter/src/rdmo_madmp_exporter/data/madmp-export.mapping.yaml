@@ -1,0 +1,336 @@
+# EDO maDMP export plugin for RDMO — mapping specification (card CF1-004)
+#
+# This file carries ALL mapping intelligence of the export plugin
+# `exports.py::MaDMPExport` (the in-RDMO variant of the EDO maDMP production,
+# next to the offline pipeline `answers_to_dmp.py` + `02_P02_S02_madmp-mapping.transform.yaml`).
+# Following the EDO principle "intelligence in YAML, generic driver", the
+# plugin realises the maDMP export functions against this spec; changing the
+# RDMO catalog (attribute paths, option URIs) only requires editing this file.
+#
+# Attribute paths below are verified against the RDMO standard catalog
+# (rdmorganiser terms, rdmo-catalog 2024) installed in the EDO RDMO instance
+# (http://127.0.0.1:8000/, project #4). Paths that only exist in the maDMP
+# example catalog are kept as commented alternatives.
+#
+# Leaf-spec grammar consumed by `exports.py`
+# ------------------------------------------
+#   {attribute: <rdmo path>, extract: text|list|bool|timestamp|value}
+#       extract defaults to `text`; `value` returns the raw Value.value
+#       (used for the repository host title), `timestamp` an ISO-8601 date.
+#   {attribute: <rdmo path>, options: <options key below>, default: <value>}
+#       translates an answered RDMO option (value.option.uri_path) into a
+#       maDMP controlled-vocabulary term.
+#   {project_field: <Project model attribute>}
+#       reads a field of the RDMO project object itself.
+#
+# Person specs additionally accept `base_attribute` plus optional suffix
+# overrides `name_suffix` / `mbox_suffix` / `identifier_suffix` (defaults:
+# name / mbox / identifier), because catalogs differ (e.g. the standard RDMO
+# catalog uses `.../email` instead of `.../mbox`).
+
+id: https://w3id.org/edo/madmp-export-mapping
+name: madmp-export-mapping
+
+# ---------------------------------------------------------------------------
+# Option maps: RDMO option uri_path -> maDMP controlled vocabulary
+# (uri_paths verified in the EDO RDMO instance; extend as the catalog grows)
+# ---------------------------------------------------------------------------
+options:
+
+  language_options: {}
+    # '': 'eng'
+    # '': 'deu'
+
+  data_access_options:
+    dataset_sharing_options/69: open
+    dataset_sharing_options/68: shared
+    dataset_sharing_options/67: shared
+    dataset_sharing_options/70: closed
+
+  certified_with_options: {}
+    # '': 'din31644'
+    # '': 'dini-zertifikat'
+    # '': 'dsa'
+    # '': 'iso16363'
+    # '': 'iso16919'
+    # '': 'trac'
+    # '': 'wds'
+    # '': 'coretrustseal'
+
+  pid_system_options:
+    pid_types/124: ark
+    pid_types/123: doi
+    pid_types/122: purl
+    pid_types/154: other
+    pid_types/121: other
+
+  license_ref_options:
+    dataset_license_types/71: https://creativecommons.org/licenses/by/4.0/
+    dataset_license_types/73: https://creativecommons.org/licenses/by-nc/4.0/
+    dataset_license_types/74: https://creativecommons.org/licenses/by-nd/4.0/
+    dataset_license_types/75: https://creativecommons.org/licenses/by-sa/4.0/
+    dataset_license_types/cc0: https://creativecommons.org/publicdomain/zero/1.0/deed.de
+
+  person_id_type_options: {}
+    # '': 'orcid'
+    # '': 'isni'
+    # '': 'openid'
+    # '': 'other'
+
+  dataset_id_type_options: {}
+    # '': 'handle'
+    # '': 'doi'
+    # '': 'ark'
+    # '': 'url'
+    # '': 'other'
+
+  dmp_id_type_options: {}
+    # '': 'handle'
+    # '': 'doi'
+    # '': 'ark'
+    # '': 'url'
+    # '': 'other'
+
+  funder_id_type_options: {}
+    # '': 'fundref'
+    # '': 'url'
+    # '': 'other'
+
+  grant_id_type_options: {}
+    # '': 'url'
+    # '': 'other'
+
+  metadata_standard_id_options: {}
+    # '': 'url'
+    # '': 'other'
+
+  currency_codes:
+    [AED, AFN, ALL, AMD, ANG, AOA, ARS, AUD, AWG, AZN,
+     BAM, BBD, BDT, BGN, BHD, BIF, BMD, BND, BOB, BRL,
+     BSD, BTN, BWP, BYN, BZD, CAD, CDF, CHF, CLP, CNY,
+     COP, CRC, CUC, CUP, CVE, CZK, DJF, DKK, DOP, DZD,
+     EGP, ERN, ETB, EUR, FJD, FKP, GBP, GEL, GGP, GHS,
+     GIP, GMD, GNF, GTQ, GYD, HKD, HNL, HRK, HTG, HUF,
+     IDR, ILS, IMP, INR, IQD, IRR, ISK, JEP, JMD, JOD,
+     JPY, KES, KGS, KHR, KMF, KPW, KRW, KWD, KYD, KZT,
+     LAK, LBP, LKR, LRD, LSL, LYD, MAD, MDL, MGA, MKD,
+     MMK, MNT, MOP, MRU, MUR, MVR, MWK, MXN, MYR, MZN,
+     NAD, NGN, NIO, NOK, NPR, NZD, OMR, PAB, PEN, PGK,
+     PHP, PKR, PLN, PYG, QAR, RON, RSD, RUB, RWF, SAR,
+     SBD, SCR, SDG, SEK, SGD, SHP, SLL, SOS, SPL, SRD,
+     STN, SVC, SYP, SZL, THB, TJS, TMT, TND, TOP, TRY,
+     TTD, TVD, TWD, TZS, UAH, UGX, USD, UYU, UZS, VEF,
+     VND, VUV, WST, XAF, XCD, XDR, XOF, XPF, YER, ZAR,
+     ZMW, ZWD]
+
+# ---------------------------------------------------------------------------
+# dmp
+# ---------------------------------------------------------------------------
+dmp:
+
+  title:
+    template: "maDMP for {project.title}"
+    # alternative: bind the DMP title to an RDMO answer instead
+    # attribute: project/research_question/title
+
+  created:
+    project_field: created
+  modified:
+    project_field: updated
+
+  # dmp/contact — a single person spec, no role
+  # Standard RDMO catalog: project/data_management carries /name and /mbox
+  # (documented as equivalent to rda:dmp/contact/name and rda:dmp/contact/mbox).
+  # maDMP example catalog: project/dmp/contact
+  contact:
+    base_attribute: project/data_management
+
+  # dmp/contributor — person specs, optionally per element of a set
+  contributor:
+    # In the installed catalog the preservation person is answered at dataset
+    # level (name AND email); the standard-catalog alternative would be
+    # `project/preservation/responsible_person` (email path missing there).
+    - base_attribute: project/dataset/preservation/responsible_person
+      mbox_suffix: email
+      role_template: Responsible for preservation
+    - base_attribute: project/dataset/metadata/responsible_person
+      mbox_suffix: email
+      set: project/dataset/id
+      role_template: "Responsible for metadata for {set.text}"
+    # maDMP example catalog only (not in the standard catalog):
+    # - base_attribute: project/partner/contact_person
+    #   set: project/partner/id
+    #   role_template: "Contact person for {set.text}"
+    # - base_attribute: project/dataset/data_security/backup_responsible
+    #   set: project/dataset/id
+    #   role_template: "Responsible for backup for {set.text}"
+    # - base_attribute: project/dataset/pids/responsible_person
+    #   set: project/dataset/id
+    #   role_template: "Responsible for PIDs for {set.text}"
+
+  # dmp/cost — one entry per answered cost question
+  cost:
+    - title: Personal costs for data creation
+      attribute: project/costs/creation/personnel
+    - title: Non personal costs for data creation
+      attribute: project/costs/creation/non_personnel
+    - title: Personal costs for data usage
+      attribute: project/costs/usage/personnel
+    - title: Non personal costs for data usage
+      attribute: project/costs/usage/non_personnel
+    - title: Personal costs for data storage
+      attribute: project/costs/storage/personnel
+    - title: Non personal costs for data storage
+      attribute: project/costs/storage/non_personnel
+    - title: Personal costs for metadata curation
+      attribute: project/costs/metadata/personnel
+    - title: Non personal costs for metadata curation
+      attribute: project/costs/metadata/non_personnel
+    - title: Personal costs for PID curation
+      attribute: project/costs/pid/personnel
+    - title: Non personal costs for PID curation
+      attribute: project/costs/pid/non_personnel
+    - title: Personal costs for data anonymization
+      attribute: project/costs/sensitive_data/anonymization/personnel
+    - title: Non personal costs for data anonymization
+      attribute: project/costs/sensitive_data/anonymization/non_personnel
+    - title: Personal costs for data security
+      attribute: project/costs/sensitive_data/security/personnel
+    - title: Non personal costs for data security
+      attribute: project/costs/sensitive_data/security/non_personnel
+    - title: Personal costs for intellectual property rights
+      attribute: project/costs/ipr/personnel
+    - title: Non personal costs for intellectual property rights
+      attribute: project/costs/ipr/non_personnel
+    - title: Personal costs for preservation
+      attribute: project/costs/preservation/personnel
+    - title: Non personal costs for preservation
+      attribute: project/costs/preservation/non_personnel
+
+  # dmp/dmp_id — not present in the standard catalog; omitted when unanswered
+  dmp_id:
+    identifier:
+      attribute: project/dmp/identifier
+    type:
+      attribute: project/dmp/identifier_type
+      options: dmp_id_type_options
+      default: other
+
+  # dmp/language
+  language:
+    attribute: project/language
+    options: language_options
+
+  # dmp/project
+  project:
+    start:
+      attribute: project/schedule/project_start
+      extract: timestamp
+    end:
+      attribute: project/schedule/project_end
+      extract: timestamp
+    title:
+      project_field: title
+    description:
+      project_field: description
+
+# ---------------------------------------------------------------------------
+# dataset (one maDMP dataset per element of the dataset set)
+# ---------------------------------------------------------------------------
+dataset:
+
+  set: project/dataset/id
+
+  fields:
+
+    data_quality_assurance:
+      attribute: project/dataset/quality_assurance   # maDMP example catalog only
+      extract: list
+
+    description:
+      attribute: project/dataset/description
+
+    # dmp/dataset/dataset_id — falls back to the dataset set value with type
+    # 'other' when no persistent identifier was answered
+    dataset_id:
+      identifier:
+        attribute: project/dataset/dataset_identifier   # maDMP example catalog only
+      type:
+        attribute: project/dataset/dataset_identifier
+        options: dataset_id_type_options
+        default: other
+      fallback_identifier:
+        attribute: project/dataset/id
+
+    # Two distributions are rendered per dataset, as in the RDA maDMP common
+    # standard: storage during the project and preservation afterwards. The
+    # post-project data_access is derived in code: open iff the during-project
+    # data_access is open, else closed.
+    distribution:
+      during:
+        title: Storage during the project
+        access_url:
+          attribute: project/dataset/storage/uri
+        data_access:
+          attribute: project/dataset/sharing/yesno
+          options: data_access_options
+        format:
+          attribute: project/dataset/format
+          extract: list
+      after:
+        title: Preservation after the project
+        certified_with:
+          attribute: project/dataset/preservation/certification
+          options: certified_with_options
+        pid_system:
+          attribute: project/dataset/pids/system          # maDMP example catalog only
+          options: pid_system_options
+        host:
+          attribute: project/dataset/preservation/repository
+          extract: value
+        license_ref:
+          attribute: project/dataset/sharing/conditions
+          options: license_ref_options
+        license_start_date:
+          attribute: project/dataset/data_publication_date
+          extract: timestamp
+
+    issued:
+      attribute: project/dataset/data_publication_date
+      extract: timestamp
+
+    keyword:
+      attribute: project/research_question/keywords
+      extract: list
+
+    language:
+      attribute: project/dataset/language   # maDMP example catalog only
+      options: language_options
+
+    personal_data:
+      attribute: project/dataset/sensitive_data/personal_data_yesno/yesno
+      extract: bool
+
+    preservation_statement:
+      attribute: project/dataset/preservation/purpose
+
+    # dmp/dataset/security_and_privacy — one entry per answered question
+    security_and_privacy:
+      - title: Access authentication
+        attribute: project/dataset/preservation/access_authentication
+      # maDMP example catalog only:
+      # - title: Access permissions
+      #   attribute: project/dataset/data_security/access_permissions
+      # - title: Security measures
+      #   attribute: project/dataset/data_security/security_measures
+
+    sensitive_data:
+      attribute: project/dataset/sensitive_data/personal_data/bdsg_3_9
+      extract: bool
+
+    type:
+      attribute: project/dataset/type   # maDMP example catalog only
+
+    # dmp/dataset/title — falls back to "Dataset #n"
+    title_fallback:
+      attribute: project/dataset/id

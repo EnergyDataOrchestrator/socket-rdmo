@@ -1,0 +1,11 @@
+# Alternative mapping spec for loader tests — deliberately minimal.
+id: https://w3id.org/edo/madmp-export-mapping-alt
+name: madmp-export-mapping-alt
+options:
+  data_access_options: {}
+dmp:
+  title:
+    template: "maDMP for {project.title}"
+dataset:
+  set: project/dataset/alternative
+  fields: {}

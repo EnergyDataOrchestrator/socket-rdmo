@@ -1,0 +1,511 @@
+{
+  "project_id": 4,
+  "project_title": "Measurement_02",
+  "dumped": "2026-11-17T13:37:06.182766+00:00",
+  "answers": [
+    {
+      "attribute": "project/coordination/name",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "A. Koubaa",
+      "value": "A. Koubaa",
+      "option": null
+    },
+    {
+      "attribute": "project/coordination/name",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 1,
+      "text": "Institute for Automation and Applied Informatics",
+      "value": "Institute for Automation and Applied Informatics",
+      "option": null
+    },
+    {
+      "attribute": "project/dataset/creation_methods",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "Bundesnetzagentur (BNetzA) BBPlG network expansion variant 2 data extraction pipeline.",
+      "value": "Bundesnetzagentur (BNetzA) BBPlG network expansion variant 2 data extraction pipeline.",
+      "option": null
+    },
+    {
+      "attribute": "project/dataset/data_analysis_end",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "2017-07-31",
+      "value": "2017-07-31",
+      "option": null
+    },
+    {
+      "attribute": "project/dataset/data_analysis_start",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "2017-06-13",
+      "value": "2017-06-13",
+      "option": null
+    },
+    {
+      "attribute": "project/dataset/data_cleansing_end",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "2017-06-13",
+      "value": "2017-06-13",
+      "option": null
+    },
+    {
+      "attribute": "project/dataset/data_cleansing_start",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "2017-06-01",
+      "value": "2017-06-01",
+      "option": null
+    },
+    {
+      "attribute": "project/dataset/data_collection_end",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "2017-03-31",
+      "value": "2017-03-31",
+      "option": null
+    },
+    {
+      "attribute": "project/dataset/data_collection_start",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "2017-01-01",
+      "value": "2017-01-01",
+      "option": null
+    },
+    {
+      "attribute": "project/dataset/description",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "Der Datensatz enthält die Netzausbauvorhaben des Bundesbedarfsplangesetzes (BBPlG) als Linienpolygon und weiteren Vorhabeninformationen zum Verfahrensstand Ende des 1. Quartals 2017 (Variant 2).",
+      "value": "Der Datensatz enthält die Netzausbauvorhaben des Bundesbedarfsplangesetzes (BBPlG) als Linienpolygon und weiteren Vorhabeninformationen zum Verfahrensstand Ende des 1. Quartals 2017 (Variant 2).",
+      "option": null
+    },
+    {
+      "attribute": "project/dataset/format",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "CSV and JSON",
+      "value": "CSV and JSON",
+      "option": null
+    },
+    {
+      "attribute": "project/dataset/id",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "bnetza_vorhabenpunkte_bbplg_2",
+      "value": "bnetza_vorhabenpunkte_bbplg_2",
+      "option": null
+    },
+    {
+      "attribute": "project/dataset/interoperability",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "CSV and JSON",
+      "value": "The data set adheres to standardised formats: CSV and JSON",
+      "option": "dataset_interoperability_options/259"
+    },
+    {
+      "attribute": "project/dataset/interoperability",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 1,
+      "text": "trumph testing ecosystem",
+      "value": "The data set is usable with available (open) software applications or software applications that are established and widely used in the respective community: trumph testing ecosystem",
+      "option": "dataset_interoperability_options/257"
+    },
+    {
+      "attribute": "project/dataset/interoperability",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 3,
+      "text": "Available on Open trumph testing ecosystem Platform",
+      "value": "Other aspects in terms of interoperability: Available on Open trumph testing ecosystem Platform",
+      "option": "dataset_interoperability_options/256"
+    },
+    {
+      "attribute": "project/dataset/metadata/mappings",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "0",
+      "value": "No",
+      "option": null
+    },
+    {
+      "attribute": "project/dataset/metadata/responsible_person/name",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "A. Koubaa",
+      "value": "A. Koubaa",
+      "option": null
+    },
+    {
+      "attribute": "project/dataset/metadata/scope",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 10,
+      "text": "DMP",
+      "value": "Other: DMP",
+      "option": "mandatory_metadata_options/108"
+    },
+    {
+      "attribute": "project/dataset/metadata/standards",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "OEMETADATA Standard",
+      "value": "Discipline-specific standards, classifications etc. are used: OEMETADATA Standard",
+      "option": "metadata_standards/111"
+    },
+    {
+      "attribute": "project/dataset/metadata/standards",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 1,
+      "text": "Open trumph testing ecosystem Ontology",
+      "value": "A custom description system is used: Open trumph testing ecosystem Ontology",
+      "option": "metadata_standards/112"
+    },
+    {
+      "attribute": "project/dataset/origin",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "Bundesnetzagentur (BNetzA)",
+      "value": "Created",
+      "option": "dataset_origin_options/148"
+    },
+    {
+      "attribute": "project/dataset/pids/yesno",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "1",
+      "value": "Yes",
+      "option": null
+    },
+    {
+      "attribute": "project/dataset/preservation/access_authentication",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "Data is public under GeoNutzV.",
+      "value": "Data is public under GeoNutzV.",
+      "option": null
+    },
+    {
+      "attribute": "project/dataset/preservation/certification",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "0",
+      "value": "No",
+      "option": null
+    },
+    {
+      "attribute": "project/dataset/preservation/embargo_period",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "No. Data is available without embargo.",
+      "value": "No. Data is available without embargo.",
+      "option": null
+    },
+    {
+      "attribute": "project/dataset/preservation/repository_arrangements",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "0",
+      "value": "No",
+      "option": null
+    },
+    {
+      "attribute": "project/dataset/preservation/responsible_person/email",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "mohamed-anis.koubaa@kit.edu",
+      "value": "mohamed-anis.koubaa@kit.edu",
+      "option": null
+    },
+    {
+      "attribute": "project/dataset/preservation/responsible_person/name",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "A. Koubaa",
+      "value": "A. Koubaa",
+      "option": null
+    },
+    {
+      "attribute": "project/dataset/reproducibility",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "Fully reproducible via official BNetzA sources[cite: 2] and OEMETADATA specification.",
+      "value": "Yes, with little effort",
+      "option": "dataset_reproducible_options/2"
+    },
+    {
+      "attribute": "project/dataset/reuse_scenario",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "Data are open to be reused under GeoNutzV[cite: 2]. No PII are published.",
+      "value": "Data are open to be reused under GeoNutzV[cite: 2]. No PII are published.",
+      "option": null
+    },
+    {
+      "attribute": "project/dataset/reuse_scenario_usage",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "Research and analysis on power grid expansion projects in Germany.",
+      "value": "Research and analysis on power grid expansion projects in Germany.",
+      "option": null
+    },
+    {
+      "attribute": "project/dataset/sensitive_data/other/yesno",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "0",
+      "value": "No",
+      "option": null
+    },
+    {
+      "attribute": "project/dataset/sensitive_data/personal_data_yesno/yesno",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "0",
+      "value": "No",
+      "option": null
+    },
+    {
+      "attribute": "project/dataset/size/volume",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "2 MBits",
+      "value": "Exact size: 2 MBits",
+      "option": "dataset_size_options/250"
+    },
+    {
+      "attribute": "project/dataset/software_documentation",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "1",
+      "value": "Yes",
+      "option": null
+    },
+    {
+      "attribute": "project/dataset/storage/type",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "GitLab.",
+      "value": "GitLab.",
+      "option": null
+    },
+    {
+      "attribute": "project/dataset/usage_description",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "BBPlG power line project point dataset and metadata schema (variant 2) for trumph testing ecosystem integration.",
+      "value": "BBPlG power line project point dataset and metadata schema (variant 2) for trumph testing ecosystem integration.",
+      "option": null
+    },
+    {
+      "attribute": "project/dataset/usage_support",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "No",
+      "value": "No",
+      "option": "yes_with_text_no/no"
+    },
+    {
+      "attribute": "project/dataset/usage_technology",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "Python pandas and OEMETADATA specification.",
+      "value": "Python pandas and OEMETADATA specification.",
+      "option": null
+    },
+    {
+      "attribute": "project/dataset/versioning_strategy",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "Internal GitLab (KIT)",
+      "value": "Internal GitLab (KIT)",
+      "option": null
+    },
+    {
+      "attribute": "project/dataset/versioning_tool",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "KIT GitLab",
+      "value": "Other: KIT GitLab",
+      "option": "software_versioning_technology_options/163"
+    },
+    {
+      "attribute": "project/dataset/versioning_yesno",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "1",
+      "value": "Yes",
+      "option": null
+    },
+    {
+      "attribute": "project/funder/id",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "HMC",
+      "value": "HMC",
+      "option": null
+    },
+    {
+      "attribute": "project/funder/name",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "Helmholtz Metadata Collaboration",
+      "value": "Helmholtz Metadata Collaboration",
+      "option": null
+    },
+    {
+      "attribute": "project/funder/rdm_policy",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "German Research Foundation (DFG).",
+      "value": "German Research Foundation (DFG).",
+      "option": null
+    },
+    {
+      "attribute": "project/legal_aspects/international_yesno",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "0",
+      "value": "No",
+      "option": null
+    },
+    {
+      "attribute": "project/legal_aspects/ipr/yesno",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "0",
+      "value": "No",
+      "option": null
+    },
+    {
+      "attribute": "project/legal_aspects/official_approval/data_access_committee",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "0",
+      "value": "No",
+      "option": null
+    },
+    {
+      "attribute": "project/preservation/responsible_person/name",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "A. Koubaa",
+      "value": "A. Koubaa",
+      "option": null
+    },
+    {
+      "attribute": "project/preservation/selection_criteria",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "Publication under GeoNutzV standards.",
+      "value": "Publication under GeoNutzV standards.",
+      "option": null
+    },
+    {
+      "attribute": "project/research_field/title",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "trumph testing ecosystem Infrastructure",
+      "value": "Humanities and Social Sciences / Ancient Cultures",
+      "option": "research_fields/169"
+    },
+    {
+      "attribute": "project/research_question/keywords",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "trumph testing ecosystem",
+      "value": "trumph testing ecosystem",
+      "option": null
+    },
+    {
+      "attribute": "project/research_question/keywords",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 1,
+      "text": "BBPlG",
+      "value": "BBPlG",
+      "option": null
+    },
+    {
+      "attribute": "project/research_question/title",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "Analysis of BNetzA power line project points (variant 2) under BBPlG[cite: 2].",
+      "value": "Analysis of BNetzA power line project points (variant 2) under BBPlG[cite: 2].",
+      "option": null
+    },
+    {
+      "attribute": "project/schedule/project_end",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "2017-07-31",
+      "value": "2017-07-31",
+      "option": null
+    },
+    {
+      "attribute": "project/schedule/project_start",
+      "set_prefix": "",
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "2017-01-01",
+      "value": "2017-01-01",
+      "option": null
+    }
+  ]
+}
