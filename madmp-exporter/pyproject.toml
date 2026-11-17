@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rdmo-madmp-exporter"
+version = "0.1.0"
+description = "Mapping-driven maDMP export plugin for RDMO — the EDO/Regimo socket-rdmo maDMP exporter (card CF1-004)"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [{ name = "EDO/Regimo — ot2661 (KIT)" }]
+keywords = ["rdmo", "madmp", "dmp", "edo", "regimo"]
+dependencies = [
+    "PyYAML>=6.0",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=7.0"]
+
+[project.urls]
+Card = "https://w3id.org/edo/cards/CF1-004"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+rdmo_madmp_exporter = ["data/*.yaml"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+markers = [
+    "live: tests that run against a real RDMO instance (auto-skipped when none is configured)",
+]
