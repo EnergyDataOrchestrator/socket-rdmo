@@ -7,6 +7,7 @@ behaviour for the exercised contract.
 """
 
 import json
+import uuid
 from pathlib import Path
 
 import pytest
@@ -58,6 +59,46 @@ def test_contributors_from_ground_truth(dmp):
 def test_costs_omitted_when_unanswered(dmp):
     # none of the 18 project/costs/* questions is answered in project #4
     assert "cost" not in dmp
+
+
+# ---------------------------------------------------------------------------
+# generated dmp_id (gap register item #6)
+# ---------------------------------------------------------------------------
+
+
+def test_dmp_id_is_generated_and_stable(dmp):
+    # minted deterministically from the project seed, not from an answer
+    expected = f"urn:uuid:{uuid.uuid5(uuid.NAMESPACE_URL, 'rdmo:project:4')}"
+    assert dmp["dmp_id"]["identifier"] == expected
+
+
+def test_dmp_id_type_is_urn(dmp):
+    assert dmp["dmp_id"]["type"] == "urn"
+
+
+def test_dmp_id_identical_across_renders(answers):
+    # two renders of the same project must carry the same DMP identifier
+    provider = FakeExport(answers)
+    renderer = MaDMPRenderer(load_mapping(), provider)
+    first = renderer.get_dmp()["dmp_id"]
+    second = renderer.get_dmp()["dmp_id"]
+    assert first == second
+
+
+def test_dmp_id_differs_per_project(answers):
+    from fakes import FakeProject
+
+    provider = FakeExport(answers, project=FakeProject())
+    renderer = MaDMPRenderer(load_mapping(), provider)
+    provider.project.pk = 5
+    assert renderer.get_dmp()["dmp_id"] != MaDMPRenderer(
+        load_mapping(), FakeExport(answers)).get_dmp()["dmp_id"]
+
+
+def test_fixed_spec_resolution():
+    renderer = MaDMPRenderer({"options": {}}, FakeExport([]))
+    assert renderer.resolve_option({"fixed": "urn"}) == "urn"
+    assert renderer.resolve_option({"fixed": "urn"}, set_index=3) == "urn"
 
 
 def test_dataset_from_ground_truth(dmp):

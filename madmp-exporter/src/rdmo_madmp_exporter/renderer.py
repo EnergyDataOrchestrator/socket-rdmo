@@ -25,10 +25,13 @@ authoritative documentation):
     {base_attribute: <rdmo path>, name_suffix: ..., mbox_suffix: ...,
      identifier_suffix: ..., role_template: ...}          # person specs
     {identifier: {...}, type: {...}, fallback_identifier: {...}}  # identifier specs
+    {generated: <kind>, seed: <template>}   # minted at export time, no RDMO source
+    {fixed: <value>}                        # constant, no RDMO source
 """
 
 from __future__ import annotations
 
+import uuid
 from collections import defaultdict
 
 
@@ -50,6 +53,9 @@ class MaDMPRenderer:
         """Resolve a leaf mapping spec against the provider's answers."""
         if not spec:
             return None
+
+        if "generated" in spec:
+            return self.generate(spec["generated"], spec)
 
         if "project_field" in spec:
             return getattr(self.provider.project, spec["project_field"], None)
@@ -74,10 +80,29 @@ class MaDMPRenderer:
         if not spec:
             return None
 
+        if "fixed" in spec:
+            return spec["fixed"]
+
         option_map = self.options.get(spec.get("options"), {})
         return self.provider.get_option(
             option_map, spec.get("attribute"), set_index=set_index,
             default=spec.get("default"))
+
+    def generate(self, kind: str, spec: dict):
+        """Mint a value that has no RDMO source (gap-register decisions).
+
+        `seed` is a format template over the project object, e.g.
+        `"rdmo:project:{project.pk}"`. `urn_uuid5` derives a stable
+        `urn:uuid:<hex>` deterministically from the seed, so every export of
+        the same project carries the same identifier.
+        """
+        seed = spec.get("seed", "{project.pk}").format(project=self.provider.project)
+
+        if kind == "urn_uuid5":
+            return f"urn:uuid:{uuid.uuid5(uuid.NAMESPACE_URL, seed)}"
+        if kind == "uuid4":
+            return f"urn:uuid:{uuid.uuid4()}"
+        raise ValueError(f"Unknown generated kind: {kind}")
 
     def resolve_identifier(self, spec: dict | None, set_index: int = 0):
         """Resolve an `{identifier, type, fallback_identifier}` spec."""

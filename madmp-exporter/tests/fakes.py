@@ -51,6 +51,7 @@ class FakeProject:
 
     def __init__(self, title="Measurement_02",
                  description="Example Measurement, as a child-project of IAI."):
+        self.pk = 4
         self.title = title
         self.description = description
         self.created = dt.datetime(2026, 3, 2, 9, 54, 14, 726258,

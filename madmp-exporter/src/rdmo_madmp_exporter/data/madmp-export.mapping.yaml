@@ -207,14 +207,16 @@ dmp:
     - title: Non personal costs for preservation
       attribute: project/costs/preservation/non_personnel
 
-  # dmp/dmp_id — not present in the standard catalog; omitted when unanswered
+  # dmp/dmp_id — the standard catalog has no question for it (gap register
+  # item #6). A stable URN:UUID is minted deterministically per project
+  # (uuid5 over the seed), so every export of the same project carries the
+  # same DMP identifier.
   dmp_id:
     identifier:
-      attribute: project/dmp/identifier
+      generated: urn_uuid5
+      seed: "rdmo:project:{project.pk}"
     type:
-      attribute: project/dmp/identifier_type
-      options: dmp_id_type_options
-      default: other
+      fixed: urn
 
   # dmp/language
   language:
