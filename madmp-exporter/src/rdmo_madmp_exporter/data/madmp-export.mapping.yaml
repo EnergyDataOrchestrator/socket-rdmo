@@ -315,6 +315,10 @@ dataset:
 
     preservation_statement:
       attribute: project/dataset/preservation/purpose
+      # checkbox question: one Value per ticked option, option text in `.value`
+      # (`.text` stays empty) — joined into the single maDMP string
+      extract: value_list
+      join: "; "
 
     # dmp/dataset/security_and_privacy — one entry per answered question
     security_and_privacy:

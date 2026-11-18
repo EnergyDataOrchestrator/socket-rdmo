@@ -33,6 +33,7 @@ class FakeValue:
     """Mirror of the relevant `rdmo.projects.models.Value` surface."""
     attribute: str
     set_index: int = 0
+    collection_index: int = 0
     text: str | None = None
     value: object = None
     unit: str | None = None
@@ -70,6 +71,7 @@ class FakeExport:
             self._values[row["attribute"]].append(FakeValue(
                 attribute=row["attribute"],
                 set_index=row.get("set_index", 0),
+                collection_index=row.get("collection_index", 0),
                 text=row.get("text"),
                 value=row.get("value"),
                 unit=row.get("unit"),
@@ -87,11 +89,18 @@ class FakeExport:
         return None
 
     def get_text(self, attribute, set_prefix="", set_index=0, collection_index=0):
+        # mirrors RDMO: returns the raw `.text`, i.e. "" for checkbox values
         value = self._lookup(attribute, set_index=set_index)
-        return value.text if value and value.text else None
+        return value.text if value else None
 
     def get_list(self, attribute, set_prefix="", set_index=0, collection_index=0):
         return [v.text for v in self._values.get(attribute, []) if v.text]
+
+    def get_values(self, attribute, set_prefix="", set_index=0):
+        """Mirror of `Export.get_values` — one set element, all collections."""
+        values = [v for v in self._values.get(attribute, [])
+                  if v.set_index == set_index]
+        return sorted(values, key=lambda v: v.collection_index)
 
     def get_bool(self, attribute, set_prefix="", set_index=0, collection_index=0):
         value = self._lookup(attribute, set_index=set_index)

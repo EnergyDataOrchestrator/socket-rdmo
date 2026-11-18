@@ -6,6 +6,7 @@ of the RDMO `Export` base class (RDMO 2.5.x):
 
     get_text(path, set_prefix='', set_index=0, collection_index=0) -> str | None
     get_list(...)      -> list[str]
+    get_values(...)    -> iterable of value objects (one set element, all collections)
     get_bool(...)      -> bool | None
     get_timestamp(...) -> date | datetime | None
     get_value(...)     -> value object with .text / .value / .unit / .option | None
@@ -19,8 +20,9 @@ so the full rendering logic is testable without an RDMO installation.
 Leaf-spec grammar consumed here (see the bundled mapping spec for the
 authoritative documentation):
 
-    {attribute: <rdmo path>, extract: text|list|bool|timestamp|value}
+    {attribute: <rdmo path>, extract: text|list|bool|timestamp|value|value_list}
     {attribute: <rdmo path>, options: <options key>, default: <value>}
+    any list-valued extract additionally accepts {join: <separator>}
     {project_field: <project object attribute>}
     {base_attribute: <rdmo path>, name_suffix: ..., mbox_suffix: ...,
      identifier_suffix: ..., role_template: ...}          # person specs
@@ -63,17 +65,28 @@ class MaDMPRenderer:
         attribute = spec.get("attribute")
         extract = spec.get("extract", "text")
         if extract == "text":
-            return self.provider.get_text(attribute, set_index=set_index)
-        if extract == "list":
-            return self.provider.get_list(attribute, set_index=set_index)
-        if extract == "bool":
-            return self.provider.get_bool(attribute, set_index=set_index)
-        if extract == "timestamp":
-            return self.provider.get_timestamp(attribute, set_index=set_index)
-        if extract == "value":
-            value = self.provider.get_value(attribute, set_index=set_index)
-            return value.value if value else None
-        raise ValueError(f"Unknown extract kind: {extract}")
+            value = self.provider.get_text(attribute, set_index=set_index)
+        elif extract == "list":
+            value = self.provider.get_list(attribute, set_index=set_index)
+        elif extract == "bool":
+            value = self.provider.get_bool(attribute, set_index=set_index)
+        elif extract == "timestamp":
+            value = self.provider.get_timestamp(attribute, set_index=set_index)
+        elif extract == "value":
+            value_obj = self.provider.get_value(attribute, set_index=set_index)
+            value = value_obj.value if value_obj else None
+        elif extract == "value_list":
+            # checkbox/option collections: one Value per ticked option, with the
+            # option text in `.value` (`.text` stays empty)
+            value = [v.value for v in self.provider.get_values(attribute, set_index=set_index)
+                     if v.value]
+        else:
+            raise ValueError(f"Unknown extract kind: {extract}")
+
+        join = spec.get("join")
+        if join is not None and isinstance(value, list):
+            return join.join(str(item) for item in value)
+        return value
 
     def resolve_option(self, spec: dict | None, set_index: int = 0):
         """Resolve an `{attribute, options, default}` spec via an option map."""

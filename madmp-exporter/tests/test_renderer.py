@@ -101,6 +101,49 @@ def test_fixed_spec_resolution():
     assert renderer.resolve_option({"fixed": "urn"}, set_index=3) == "urn"
 
 
+# ---------------------------------------------------------------------------
+# value_list extract + join modifier (checkbox collections, e.g. preservation)
+# ---------------------------------------------------------------------------
+
+CHECKBOX_ANSWERS = [
+    # one Value per ticked option; option text lives in `.value`, `.text` empty;
+    # collection indices are non-contiguous, as RDMO keeps them on deselect
+    {"attribute": "project/dataset/preservation/purpose", "set_index": 0,
+     "collection_index": 0, "text": "", "value": "Basis of a publication",
+     "option": "preservation_motivation_options/131"},
+    {"attribute": "project/dataset/preservation/purpose", "set_index": 0,
+     "collection_index": 2, "text": "", "value": "Legal obligations",
+     "option": "preservation_motivation_options/132"},
+    {"attribute": "project/dataset/preservation/purpose", "set_index": 0,
+     "collection_index": 4, "text": "", "value": "Self-commitment",
+     "option": "preservation_motivation_options/134"},
+]
+
+
+def test_value_list_joins_checkbox_values():
+    provider = FakeExport(CHECKBOX_ANSWERS)
+    renderer = MaDMPRenderer({"options": {}}, provider)
+    spec = {"attribute": "project/dataset/preservation/purpose",
+            "extract": "value_list", "join": "; "}
+    assert renderer.resolve(spec) == "Basis of a publication; Legal obligations; Self-commitment"
+
+
+def test_value_list_without_join_returns_ordered_list():
+    provider = FakeExport(CHECKBOX_ANSWERS)
+    renderer = MaDMPRenderer({"options": {}}, provider)
+    spec = {"attribute": "project/dataset/preservation/purpose",
+            "extract": "value_list"}
+    assert renderer.resolve(spec) == ["Basis of a publication", "Legal obligations",
+                                      "Self-commitment"]
+
+
+def test_text_extract_stays_empty_for_checkbox_values():
+    # documents WHY extract: text silently dropped the field (gap register #14-adjacent)
+    provider = FakeExport(CHECKBOX_ANSWERS)
+    renderer = MaDMPRenderer({"options": {}}, provider)
+    assert renderer.resolve({"attribute": "project/dataset/preservation/purpose"}) == ""
+
+
 def test_dataset_from_ground_truth(dmp):
     assert len(dmp["dataset"]) == 1
     dataset = dmp["dataset"][0]
