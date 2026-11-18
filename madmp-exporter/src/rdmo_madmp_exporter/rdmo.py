@@ -76,6 +76,18 @@ class MaDMPExportMixin:
     def get_dmp(self) -> dict:
         return self.renderer.get_dmp()
 
+    def resolve(self, spec, set_index=0):
+        """Resolve a leaf mapping spec; delegates to the renderer."""
+        return self.renderer.resolve(spec, set_index=set_index)
+
+    def resolve_option(self, spec, set_index=0):
+        """Resolve an `{attribute, options, default}` spec; validator-facing."""
+        return self.renderer.resolve_option(spec, set_index=set_index)
+
+    def resolve_identifier(self, spec, set_index=0):
+        """Resolve an `{identifier, type, fallback_identifier}` spec."""
+        return self.renderer.resolve_identifier(spec, set_index=set_index)
+
     def get_person(self, spec, set_index=0, roles=None):
         return self.renderer.get_person(spec, set_index=set_index, roles=roles)
 

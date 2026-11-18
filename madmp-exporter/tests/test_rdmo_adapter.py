@@ -77,3 +77,57 @@ def test_custom_mapping_file_override(tmp_path):
 def test_mixin_docstring_documents_set_index_contract():
     """The set_index positional-slot pitfall must stay documented."""
     assert "set_index" in (MaDMPExportMixin.__doc__ or "")
+
+
+def test_adapter_resolve_delegates_to_renderer():
+    """The validator/tooling calls `export.resolve(...)` on the plugin object;
+    the mixin must delegate it to the renderer (restores the seed contract)."""
+    class MockMaDMPExport(MaDMPExportMixin, FakeExport):
+        pass
+
+    answers = [
+        {"attribute": "project/dataset/preservation/responsible_person/name",
+         "set_index": 0, "text": "A. Koubaa"},
+    ]
+    export = MockMaDMPExport(answers)
+    assert export.resolve({"attribute": "project/dataset/preservation/responsible_person/name"}) \
+        == "A. Koubaa"
+
+
+def test_adapter_resolve_project_field():
+    class MockMaDMPExport(MaDMPExportMixin, FakeExport):
+        pass
+
+    export = MockMaDMPExport([])
+    # 'project.title' flows through project_field; FakeExport.project.title is set
+    resolved = export.resolve({"project_field": "title"})
+    assert resolved == export.project.title
+
+
+def test_adapter_resolve_option_delegates():
+    class MockMaDMPExport(MaDMPExportMixin, FakeExport):
+        pass
+
+    export = MockMaDMPExport([])
+    spec = {"attribute": "project/dataset/sharing/yesno",
+            "options": "dataset_sharing_options/{67..70}",
+            "default": "closed"}
+    # no answering value -> default "closed" from the bundled option map
+    assert export.resolve_option(spec) == "closed"
+
+
+def test_adapter_resolve_identifier_delegates():
+    class MockMaDMPExport(MaDMPExportMixin, FakeExport):
+        pass
+
+    answers = [
+        {"attribute": "project/dataset/id_identifier",
+         "set_index": 0, "text": "bnetza_vorhabenpunkte_bbplg_2"},
+    ]
+    export = MockMaDMPExport(answers)
+    resolved = export.resolve_identifier({
+        "identifier": {"attribute": "project/dataset/id_identifier"},
+        "type": {"options": "dataset_id_type_options", "default": "other"},
+        "fallback_identifier": {"attribute": "project/dataset/title"},
+    })
+    assert resolved == {"identifier": "bnetza_vorhabenpunkte_bbplg_2", "type": "other"}

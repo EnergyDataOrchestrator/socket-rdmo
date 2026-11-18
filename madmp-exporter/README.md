@@ -101,9 +101,35 @@ RDMO env (editable, so edits in this repo take effect after a server reload):
 # 2. shim: site-packages/rdmo_madmp/exports.py
 from rdmo_madmp_exporter.rdmo import MaDMPExport  # noqa: F401
 
-# 3. registration (already in place): config/settings/local.py
-PROJECT_EXPORTS += [('rdmo_madmp.exports.MaDMPExport')]
+# 3. registration in config/settings/local.py — each entry a (key,label,class) 3-tuple
+PROJECT_EXPORTS = [
+    ('xml', 'RDMO XML', 'rdmo.projects.exports.RDMOXMLExport'),
+    ('csvcomma', 'CSV (comma separated)', 'rdmo.projects.exports.CSVCommaExport'),
+    ('csvsemicolon', 'CSV (semicolon separated)', 'rdmo.projects.exports.CSVSemicolonExport'),
+    ('json', 'JSON', 'rdmo.projects.exports.JSONExport'),
+    ('madmp', 'maDMP Export Plugin', 'rdmo_madmp.exports.MaDMPExport'),
+]
 ```
+
+> **Do not** add the plugin to `PROJECT_EXPORTS` as a bare string — every entry
+> must be the 3-tuple `(key, label, class_path)`. A stray non-tuple entry is
+> what produces `ValueError: Need 3 values to unpack in for loop` (and a plain
+> 2-tuple yields `not enough values to unpack`).
+
+### Verifying the registration (before starting the server)
+
+```bash
+cd /Users/ot2661/Servers/rdmo-app
+DJANGO_SETTINGS_MODULE=config.settings env/bin/python -c "
+import django; django.setup()
+from rdmo.core.plugins import get_plugins
+for k, p in get_plugins('PROJECT_EXPORTS').items():
+    print(k, '|', p.label, '|', p.class_name)
+"
+```
+
+The `madmp` row must appear with label `maDMP Export Plugin` and class
+`rdmo_madmp.exports.MaDMPExport`.
 
 ### Mapping-spec resolution order
 
@@ -113,6 +139,66 @@ PROJECT_EXPORTS += [('rdmo_madmp.exports.MaDMPExport')]
 
 Point 2/1 at another spec to bind the plugin to a different RDMO catalog —
 no code changes required.
+
+### Running the instance
+
+Start the RDMO server from **its own** environment — the plugin lives there:
+
+```bash
+cd /Users/ot2661/Servers/rdmo-app
+source env/bin/activate          # py3.14 env with rdmo-madmp-exporter installed
+python manage.py runserver       # http://127.0.0.1:8000/
+```
+
+> **Watch out for the second install.** `~/Servers/rdmo/.venv` (uv-managed,
+> Python 3.12) is a *separate* RDMO checkout **without** this plugin. If that
+> venv is active in your shell, `runserver` dies during startup with
+> `ModuleNotFoundError: No module named 'rdmo_madmp'` while loading
+> `INSTALLED_APPS`. The fix is not a reinstall — either activate `env/bin`
+> from `rdmo-app` (as above) or call the env python directly:
+> `env/bin/python manage.py runserver`.
+
+### Stopping the server
+
+A running instance holds port 8000; find its PID and terminate it gracefully:
+
+```bash
+lsof -nP -iTCP:8000 -sTCP:LISTEN   # shows the LISTEN-ing Python process
+kill <PID>                          # SIGTERM, clean shutdown
+```
+
+Django's autoreloader runs as a child process; it exits by itself when the
+parent dies. Use `kill -9 <PID>` only if a hung process ignores SIGTERM.
+
+## Troubleshooting: export plugins not appearing / template errors
+
+All of the following are symptoms of a single invariant being violated:
+**`PROJECT_EXPORTS` must be a list of `(key, label, class_path)` 3-tuples.**
+Both the RDMO loader and the UI sidebar iterate it as flat 3-tuples — they must
+agree, and `local.py` must feed them that shape.
+
+| Symptom | Root cause | Fix |
+|---|---|---|
+| `ValueError: Need 3 values to unpack in for loop; got 30` | `PROJECT_EXPORTS` was replaced with something that isn't a list of 3-tuples (e.g. a list of 30 unrelated items, or mixed entries) | Re-declare `PROJECT_EXPORTS` as clean 3-tuples (see registration block above) |
+| `ValueError: need 3 values, got 2` / `too many values (expected 3)` | one entry is a 2- or 4-tuple (e.g. `('madmp','label')` missing the class path) | Ensure every entry is exactly `(key, label, class_path)` |
+| Export box missing / plugins don't show | A broken `local.py` (wrong shape) or a locally-patched sidebar template | Restore `…/rdmo/projects/templates/projects/project_detail_sidebar.html` from anything you overrode; it ships with `{% for key, label, class in settings.PROJECT_EXPORTS %}` — keep that loop as-is |
+
+Two consumer contracts you **must not desync**:
+
+* **Loader** — `rdmo/core/plugins.py` does
+  `for key, label, class_name in getattr(settings, 'PROJECT_EXPORTS')` and
+  `import_class(class_name)` (splits the dotted path into module+class).
+* **UI sidebar** — `projects/project_detail_sidebar.html` renders
+  `{% url 'project_export' project.pk key %}` with `{{ label }}`, so the URL key
+  must be a lower-case identifier (`madmp`), **not** the dotted class path.
+
+If you experiment with the sidebar template, do it on a copy and always verify
+against the shipped `.bak` so the loop form stays a 3-tuple unpack.
+
+**Second install trap:** there are two RDMO installs — `~/Servers/rdmo-app`
+(active; `env/`, py3.14, plugin + shim here) and `~/Servers/rdmo` (uv `.venv`,
+py3.12, **no** plugin). Only `rdmo-app` has the plugin; do not edit the wrong
+one.
 
 ## API
 
