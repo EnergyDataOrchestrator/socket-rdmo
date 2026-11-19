@@ -144,6 +144,57 @@ def test_text_extract_stays_empty_for_checkbox_values():
     assert renderer.resolve({"attribute": "project/dataset/preservation/purpose"}) == ""
 
 
+# ---------------------------------------------------------------------------
+# items_list extract (dash-formatted textarea, e.g. quality assurance)
+# ---------------------------------------------------------------------------
+
+ITEMS_LIST_ANSWERS = [
+    {"attribute": "project/dataset/quality_assurance", "set_index": 0,
+     "text": "- completeness checks\n- data reconciliation\n- sampling procedures"},
+]
+
+
+def test_items_list_splits_dash_lines_into_proper_list():
+    provider = FakeExport(ITEMS_LIST_ANSWERS)
+    renderer = MaDMPRenderer({"options": {}}, provider)
+    spec = {"attribute": "project/dataset/quality_assurance",
+            "extract": "items_list"}
+    assert renderer.resolve(spec) == ["completeness checks", "data reconciliation",
+                                      "sampling procedures"]
+
+
+def test_items_list_drops_blank_lines_and_stray_dashes():
+    provider = FakeExport([
+        {"attribute": "project/dataset/quality_assurance", "set_index": 0,
+         "text": "- first\n\n-\n  - indented second\nplain line"},
+    ])
+    renderer = MaDMPRenderer({"options": {}}, provider)
+    spec = {"attribute": "project/dataset/quality_assurance",
+            "extract": "items_list"}
+    # blank lines dropped, stray "-" alone dropped, indented dash handled,
+    # non-dash lines kept as-is (lossless for plain line lists)
+    assert renderer.resolve(spec) == ["first", "indented second", "plain line"]
+
+
+def test_items_list_empty_text_yields_empty_list():
+    provider = FakeExport([
+        {"attribute": "project/dataset/quality_assurance", "set_index": 0,
+         "text": ""},
+    ])
+    renderer = MaDMPRenderer({"options": {}}, provider)
+    spec = {"attribute": "project/dataset/quality_assurance",
+            "extract": "items_list"}
+    assert renderer.resolve(spec) == []
+
+
+def test_items_list_unanswered_yields_empty_list():
+    provider = FakeExport([])
+    renderer = MaDMPRenderer({"options": {}}, provider)
+    spec = {"attribute": "project/dataset/quality_assurance",
+            "extract": "items_list"}
+    assert renderer.resolve(spec) == []
+
+
 def test_dataset_from_ground_truth(dmp):
     assert len(dmp["dataset"]) == 1
     dataset = dmp["dataset"][0]

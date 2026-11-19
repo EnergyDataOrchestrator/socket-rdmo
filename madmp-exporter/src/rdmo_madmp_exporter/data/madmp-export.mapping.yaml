@@ -246,8 +246,8 @@ dataset:
   fields:
 
     data_quality_assurance:
-      attribute: project/dataset/quality_assurance   # maDMP example catalog only
-      extract: list
+      attribute: project/dataset/quality_assurance   # standard catalog: "What quality assurance measures…" (items-list textarea, one "- "-prefixed item per line)
+      extract: items_list
 
     description:
       attribute: project/dataset/description

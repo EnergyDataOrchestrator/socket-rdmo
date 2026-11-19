@@ -20,7 +20,7 @@ so the full rendering logic is testable without an RDMO installation.
 Leaf-spec grammar consumed here (see the bundled mapping spec for the
 authoritative documentation):
 
-    {attribute: <rdmo path>, extract: text|list|bool|timestamp|value|value_list}
+    {attribute: <rdmo path>, extract: text|list|bool|timestamp|value|value_list|items_list}
     {attribute: <rdmo path>, options: <options key>, default: <value>}
     any list-valued extract additionally accepts {join: <separator>}
     {project_field: <project object attribute>}
@@ -80,6 +80,10 @@ class MaDMPRenderer:
             # option text in `.value` (`.text` stays empty)
             value = [v.value for v in self.provider.get_values(attribute, set_index=set_index)
                      if v.value]
+        elif extract == "items_list":
+            # items-list textarea: one item per line, prefixed with "- "
+            value = self._split_items(
+                self.provider.get_text(attribute, set_index=set_index))
         else:
             raise ValueError(f"Unknown extract kind: {extract}")
 
@@ -87,6 +91,26 @@ class MaDMPRenderer:
         if join is not None and isinstance(value, list):
             return join.join(str(item) for item in value)
         return value
+
+    @staticmethod
+    def _split_items(raw) -> list[str]:
+        """Split an items-list textarea into a proper list of items.
+
+        RDMO's catalog answer convention (Section Data usage, quality
+        assurance) is one item per line, prefixed with `- `. Lines are
+        stripped; leading `- ` bullets removed; blank lines dropped. Non-dash
+        lines are kept as-is, so the split is lossless for plain line lists.
+        """
+        if not raw:
+            return []
+        items = []
+        for line in str(raw).splitlines():
+            line = line.strip()
+            if line.startswith("-"):
+                line = line[1:].strip()
+            if line:
+                items.append(line)
+        return items
 
     def resolve_option(self, spec: dict | None, set_index: int = 0):
         """Resolve an `{attribute, options, default}` spec via an option map."""
