@@ -202,6 +202,29 @@ one.
 
 ## API
 
+### maDMP over HTTP (CF1 sync entry point)
+
+The plugin exposes one DRF endpoint so other sockets (e.g. `regimo-core`) can
+pull a project's maDMP without touching the RDMO database directly:
+
+```
+GET /api/v1/madmp/projects/{pk}/
+```
+
+- Auth: Token / Basic / Session (`IsAuthenticated`) plus RDMO's
+  `projects.export_project_object` permission.
+- Response: `{"dmp": {...}}` — byte-identical to the export plugin's
+  `MaDMPExport.get_dmp()` output (verified by the live test).
+- Deployment: one line in the instance's `config/urls.py`:
+
+  ```python
+  path("api/v1/madmp/", include("rdmo_madmp_exporter.urls")),
+  ```
+
+A token for machine access: `python manage.py drf_create_token <user>`.
+
+### Python API
+
 ```python
 from rdmo_madmp_exporter import load_mapping, MaDMPRenderer, structural_checks
 
