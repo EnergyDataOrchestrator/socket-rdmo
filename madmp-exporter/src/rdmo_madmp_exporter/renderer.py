@@ -27,6 +27,8 @@ authoritative documentation):
     {base_attribute: <rdmo path>, name_suffix: ..., mbox_suffix: ...,
      identifier_suffix: ..., role_template: ...}          # person specs
     {identifier: {...}, type: {...}, fallback_identifier: {...}}  # identifier specs
+    {funder: {name: ..., funder_id: <identifier spec>}, grant_id: [<identifier spec>],
+     funding_status: ...}                                     # funding spec
     {generated: <kind>, seed: <template>}   # minted at export time, no RDMO source
     {fixed: <value>}                        # constant, no RDMO source
 """
@@ -216,6 +218,13 @@ class MaDMPRenderer:
         if dmp_id:
             dmp["dmp_id"] = dmp_id
 
+        # dmp/funding
+        funding_spec = mapping.get("funding")
+        if funding_spec:
+            funding = self.get_funding(funding_spec)
+            if funding:
+                dmp["funding"] = [funding]
+
         # dmp/language
         language = self.resolve_option(mapping.get("language"))
         if language:
@@ -282,6 +291,36 @@ class MaDMPRenderer:
             contributor["role"] = roles
 
         return contributor
+
+    def get_funding(self, spec):
+        """Render the dmp/funding entry; skipped when no funder name is answered.
+
+        The funder itself renders like an identifier-bearing entity: `name`
+        plus the optional `funder_id` identifier spec. Each element of the
+        optional `grant_id` list is an identifier spec of its own.
+        """
+        funder_spec = spec.get("funder", {})
+        name = self.resolve(funder_spec.get("name"))
+        if not name:
+            return None
+
+        funder = {"name": name}
+        funder_id = self.resolve_identifier(funder_spec.get("funder_id"))
+        if funder_id:
+            funder["funder_id"] = funder_id
+
+        funding = {"funder": funder}
+        grants = [grant for grant in (self.resolve_identifier(grant_spec)
+                                      for grant_spec in spec.get("grant_id", []))
+                  if grant]
+        if grants:
+            funding["grant_id"] = grants
+
+        status = self.resolve_option(spec.get("funding_status"))
+        if status:
+            funding["funding_status"] = status
+
+        return funding
 
     def get_cost(self, spec):
         """Render one dmp/cost entry; skipped when the question is unanswered."""

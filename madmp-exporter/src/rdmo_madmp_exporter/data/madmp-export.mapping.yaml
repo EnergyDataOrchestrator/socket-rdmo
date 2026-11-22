@@ -218,6 +218,27 @@ dmp:
     type:
       fixed: urn
 
+  # dmp/funding — the standard catalog answers the funder at
+  # project/funder/{id,name} (no grant / funding-status questions, gap register).
+  # There is one funding entry (the catalog has a single funder, not a set).
+  # funder_id type: the catalog stores the funder id as free text; EDO answers
+  # carry URLs (e.g. https://helmholtz-metadaten.de/about-hmc), so 'url' is the
+  # sensible default — a catalog option question can override via
+  # funder_id_type_options.
+  funding:
+    funder:
+      name:
+        attribute: project/funder/name
+      funder_id:
+        identifier:
+          attribute: project/funder/id
+        type:
+          options: funder_id_type_options
+          default: url
+    grant_id: []
+    funding_status:
+      fixed: granted
+
   # dmp/language
   language:
     attribute: project/language

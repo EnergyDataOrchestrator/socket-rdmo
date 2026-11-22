@@ -60,3 +60,27 @@ def test_bad_contributor_role_fails():
     document["dmp"]["contributor"][0]["role"] = "Responsible for preservation"
     failed = [c["check"] for c in structural_checks(document) if not c["ok"]]
     assert any("contributor[0].role" in f for f in failed)
+
+
+def test_funding_entry_passes_all_checks():
+    document = make_document(dmp={"funding": [{
+        "funder": {
+            "name": "Helmholtz Metadata Collaboration",
+            "funder_id": {
+                "identifier": "https://helmholtz-metadaten.de/about-hmc",
+                "type": "url",
+            },
+        },
+        "funding_status": "granted",
+    }]})
+    summary = summarize_checks(structural_checks(document))
+    assert summary["failed"] == [], summary
+
+
+def test_bad_funding_status_fails():
+    document = make_document(dmp={"funding": [{
+        "funder": {"name": "Helmholtz Metadata Collaboration"},
+        "funding_status": "maybe",
+    }]})
+    failed = [c["check"] for c in structural_checks(document) if not c["ok"]]
+    assert any("funding_status" in f for f in failed)

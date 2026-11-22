@@ -233,6 +233,26 @@ def test_project_section(dmp):
     assert project["end"] == "2017-07-31"
 
 
+def test_funding_from_ground_truth(dmp):
+    # the bnetza ground truth answers project/funder/{id,name} with free text
+    # (id 'HMC' — not a URL), so the mapping default yields funder_id type 'url'
+    funding = dmp["funding"]
+    assert len(funding) == 1
+    entry = funding[0]
+    assert entry["funder"]["name"] == "Helmholtz Metadata Collaboration"
+    assert entry["funder"]["funder_id"]["identifier"] == "HMC"
+    assert entry["funder"]["funder_id"]["type"] == "url"
+    assert entry["funding_status"] == "granted"
+    # the standard catalog has no grant questions — grant_id stays absent
+    assert "grant_id" not in entry
+
+
+def test_funding_absent_when_unanswered(answers):
+    trimmed = [row for row in answers if "funder" not in row["attribute"]]
+    dmp = MaDMPRenderer(load_mapping(), FakeExport(trimmed)).get_dmp()
+    assert "funding" not in dmp
+
+
 def test_unanswered_paths_resolve_to_none(answers):
     provider = FakeExport(answers)
     renderer = MaDMPRenderer(load_mapping(), provider)

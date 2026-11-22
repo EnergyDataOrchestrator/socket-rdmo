@@ -94,6 +94,9 @@ class MaDMPExportMixin:
     def get_cost(self, spec):
         return self.renderer.get_cost(spec)
 
+    def get_funding(self, spec):
+        return self.renderer.get_funding(spec)
+
     def get_dataset(self, dataset):
         return self.renderer.get_dataset(dataset)
 

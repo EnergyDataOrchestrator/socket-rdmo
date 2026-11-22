@@ -8,6 +8,8 @@ maDMP common standard / the EDO `madmp-lightmodel.yaml` subset:
 * ISO-8601 `created` / `modified`
 * person objects (contact/contributor) with string names, list-of-str roles
 * cost entries with numeric values
+* funding entries with a funder (name, optional funder_id identifier) and
+  `funding_status in planned|applied|granted|rejected`
 * dataset entries with `yes|no|unknown` for personal/sensitive data,
   identifier objects, and distributions with
   `data_access in open|shared|closed|external`
@@ -21,6 +23,7 @@ from __future__ import annotations
 
 YES_NO_UNKNOWN = {"yes", "no", "unknown"}
 DATA_ACCESS = {"open", "shared", "closed", "external"}
+FUNDING_STATUS = {"planned", "applied", "granted", "rejected"}
 
 
 def _check(checks: list, name: str, ok, detail: str = "") -> None:
@@ -59,6 +62,21 @@ def structural_checks(document: dict) -> list[dict]:
         _check(checks, f"dmp/cost[{i}] has title and numeric value",
                isinstance(cost.get("title"), str)
                and isinstance(cost.get("value"), (int, float)))
+
+    for i, funding in enumerate(dmp.get("funding", []) or []):
+        funder = funding.get("funder", {})
+        _check(checks, f"dmp/funding[{i}].funder has name (str)",
+               isinstance(funder.get("name"), str))
+        funder_id = funder.get("funder_id")
+        if funder_id is not None:
+            _check(checks, f"dmp/funding[{i}].funder.funder_id has identifier (str)",
+                   isinstance(funder_id.get("identifier"), str))
+        status = funding.get("funding_status")
+        if status is not None:
+            _check(checks,
+                   f"dmp/funding[{i}].funding_status in "
+                   "planned|applied|granted|rejected",
+                   status in FUNDING_STATUS, str(status))
 
     datasets = dmp.get("dataset", [])
     _check(checks, "dmp/dataset is a list", isinstance(datasets, list))
