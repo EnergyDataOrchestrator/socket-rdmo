@@ -77,7 +77,7 @@ the live tier proves the instance:
 | Tier | Environment | Command |
 |---|---|---|
 | Mock (no RDMO) | any Python ≥ 3.10 with `pip install -e .[test]` | `.venv/bin/python -m pytest tests -m "not live"` |
-| Live (real RDMO) | the RDMO env (`pytest` required) | `/Users/ot2661/Servers/rdmo-app/env/bin/python -m pytest tests` |
+| Live (real RDMO) | the RDMO env (`pytest` required) | `infrastructure/Servers/rdmo-app/env/bin/python -m pytest tests` |
 
 The mock tests run against `tests/data/bnetza-measurement-02-answers.json` —
 the ground-truth dump of the live RDMO project #4 (BNetzA BBPlG answer set),
@@ -95,7 +95,7 @@ RDMO env (editable, so edits in this repo take effect after a server reload):
 
 ```bash
 # 1. install the package into the RDMO env
-/Users/ot2661/Servers/rdmo-app/env/bin/pip install --no-build-isolation \
+infrastructure/Servers/rdmo-app/env/bin/pip install --no-build-isolation \
     -e components/socket-rdmo/madmp-exporter
 
 # 2. shim: site-packages/rdmo_madmp/exports.py
@@ -119,7 +119,7 @@ PROJECT_EXPORTS = [
 ### Verifying the registration (before starting the server)
 
 ```bash
-cd /Users/ot2661/Servers/rdmo-app
+cd infrastructure/Servers/rdmo-app
 DJANGO_SETTINGS_MODULE=config.settings env/bin/python -c "
 import django; django.setup()
 from rdmo.core.plugins import get_plugins
@@ -142,20 +142,23 @@ no code changes required.
 
 ### Running the instance
 
-Start the RDMO server from **its own** environment — the plugin lives there:
+The dev RDMO instance lives **in the repo tree**, in the `regimo-infrastructure`
+submodule (cloned from the official `rdmorganiser/rdmo-app` skeleton, Python
+3.12 env, SQLite dev database, superuser `admin` / `admin` — see
+`infrastructure/README.md`). The plugin is installed into that instance's env:
 
 ```bash
-cd /Users/ot2661/Servers/rdmo-app
-source env/bin/activate          # py3.14 env with rdmo-madmp-exporter installed
+cd infrastructure/Servers/rdmo-app
+source env/bin/activate          # py3.12 env with rdmo + rdmo-madmp-exporter installed
 python manage.py runserver       # http://127.0.0.1:8000/
 ```
 
-> **Watch out for the second install.** `~/Servers/rdmo/.venv` (uv-managed,
-> Python 3.12) is a *separate* RDMO checkout **without** this plugin. If that
-> venv is active in your shell, `runserver` dies during startup with
-> `ModuleNotFoundError: No module named 'rdmo_madmp'` while loading
-> `INSTALLED_APPS`. The fix is not a reinstall — either activate `env/bin`
-> from `rdmo-app` (as above) or call the env python directly:
+> **Only one RDMO env, please.** The instance has exactly one virtualenv
+> (`env/`) and one `config/settings/local.py`. If `runserver` dies during
+> startup with `ModuleNotFoundError: No module named 'rdmo_madmp'` while
+> loading `INSTALLED_APPS`, another RDMO checkout/venv is active in your
+> shell — activate `env/bin` from `infrastructure/Servers/rdmo-app` (as
+> above) or call the env python directly:
 > `env/bin/python manage.py runserver`.
 
 ### Stopping the server
@@ -195,10 +198,12 @@ Two consumer contracts you **must not desync**:
 If you experiment with the sidebar template, do it on a copy and always verify
 against the shipped `.bak` so the loop form stays a 3-tuple unpack.
 
-**Second install trap:** there are two RDMO installs — `~/Servers/rdmo-app`
-(active; `env/`, py3.14, plugin + shim here) and `~/Servers/rdmo` (uv `.venv`,
-py3.12, **no** plugin). Only `rdmo-app` has the plugin; do not edit the wrong
-one.
+**Second install trap:** keep exactly one RDMO env — the one at
+`infrastructure/Servers/rdmo-app/env/`. Older checkouts under `~/Servers/`
+(`~/Servers/rdmo-app`, `~/Servers/rdmo/.venv`) predate the move into the repo
+and no longer exist on current machines; if one is ever active in your shell
+it will be a **plugin-less** RDMO and `runserver` will fail as described
+above.
 
 ## API
 
