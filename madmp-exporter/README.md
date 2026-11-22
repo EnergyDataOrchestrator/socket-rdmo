@@ -90,33 +90,54 @@ Live tests are auto-skipped when `tests/conftest.py::RDMO_APP` does not exist
 
 ## Installation & RDMO integration
 
-The RDMO instance keeps a **one-line shim**; the package is installed into the
-RDMO env (editable, so edits in this repo take effect after a server reload):
+The plugin is installed into the dev RDMO instance by a single admin script,
+`infrastructure/scripts/install_madmp_exporter.py` (run from the repo root):
 
 ```bash
-# 1. install the package into the RDMO env
-infrastructure/Servers/rdmo-app/env/bin/pip install --no-build-isolation \
-    -e components/socket-rdmo/madmp-exporter
-
-# 2. shim: site-packages/rdmo_madmp/exports.py
-from rdmo_madmp_exporter.rdmo import MaDMPExport  # noqa: F401
-
-# 3. registration in config/settings/local.py — each entry a (key,label,class) 3-tuple
-PROJECT_EXPORTS = [
-    ('xml', 'RDMO XML', 'rdmo.projects.exports.RDMOXMLExport'),
-    ('csvcomma', 'CSV (comma separated)', 'rdmo.projects.exports.CSVCommaExport'),
-    ('csvsemicolon', 'CSV (semicolon separated)', 'rdmo.projects.exports.CSVSemicolonExport'),
-    ('json', 'JSON', 'rdmo.projects.exports.JSONExport'),
-    ('madmp', 'maDMP Export Plugin', 'rdmo_madmp.exports.MaDMPExport'),
-]
+python3 infrastructure/scripts/install_madmp_exporter.py
 ```
 
+It is **idempotent** and does everything the integration needs:
+
+1. installs the package into the RDMO env via `uv pip install --python
+   infrastructure/Servers/rdmo-app/env/bin/python -e
+   components/socket-rdmo/madmp-exporter` (the env is uv-managed and has no
+   pip; editable, so edits in this repo take effect after a server reload),
+2. appends the plugin registration to `config/settings/local.py` —
+   each entry a `(key, label, class)` 3-tuple:
+
+   ```python
+   PROJECT_EXPORTS += [('madmp', 'maDMP Export Plugin', 'rdmo_madmp_exporter.rdmo.MaDMPExport')]
+   ```
+
+3. wires the API route into `config/urls.py`:
+
+   ```python
+   path('api/v1/madmp/', include('rdmo_madmp_exporter.urls')),
+   ```
+
+4. verifies the result through the RDMO env (plugin listed by
+   `get_plugins('PROJECT_EXPORTS')`, route reverses) and prints the access
+   paths:
+
+   - Web UI: project page → *maDMP Export Plugin*
+   - HTTP API: `GET /api/v1/madmp/projects/{pk}/` (Token/Basic/Session auth)
+
+Useful flags: `--dry-run`, and `--create-token USER` to mint a DRF token for
+machine access (equivalent to `manage.py drf_create_token <user>`).
+
+> The historical `rdmo_madmp` site-packages shim is gone; registration uses
+> the direct class path `rdmo_madmp_exporter.rdmo.MaDMPExport`, which is also
+> the `PLUGIN_PATH` the bundled API view uses.
+>
 > **Do not** add the plugin to `PROJECT_EXPORTS` as a bare string — every entry
 > must be the 3-tuple `(key, label, class_path)`. A stray non-tuple entry is
 > what produces `ValueError: Need 3 values to unpack in for loop` (and a plain
 > 2-tuple yields `not enough values to unpack`).
 
 ### Verifying the registration (before starting the server)
+
+The script performs this check itself at the end; to run it standalone:
 
 ```bash
 cd infrastructure/Servers/rdmo-app
@@ -129,7 +150,7 @@ for k, p in get_plugins('PROJECT_EXPORTS').items():
 ```
 
 The `madmp` row must appear with label `maDMP Export Plugin` and class
-`rdmo_madmp.exports.MaDMPExport`.
+`rdmo_madmp_exporter.rdmo.MaDMPExport`.
 
 ### Mapping-spec resolution order
 
@@ -155,8 +176,8 @@ python manage.py runserver       # http://127.0.0.1:8000/
 
 > **Only one RDMO env, please.** The instance has exactly one virtualenv
 > (`env/`) and one `config/settings/local.py`. If `runserver` dies during
-> startup with `ModuleNotFoundError: No module named 'rdmo_madmp'` while
-> loading `INSTALLED_APPS`, another RDMO checkout/venv is active in your
+> startup with `ModuleNotFoundError: No module named 'rdmo_madmp_exporter'`
+> while loading `INSTALLED_APPS`, another RDMO checkout/venv is active in your
 > shell — activate `env/bin` from `infrastructure/Servers/rdmo-app` (as
 > above) or call the env python directly:
 > `env/bin/python manage.py runserver`.
@@ -220,13 +241,15 @@ GET /api/v1/madmp/projects/{pk}/
   `projects.export_project_object` permission.
 - Response: `{"dmp": {...}}` — byte-identical to the export plugin's
   `MaDMPExport.get_dmp()` output (verified by the live test).
-- Deployment: one line in the instance's `config/urls.py`:
+- Deployment: the admin script wires this line into the instance's
+  `config/urls.py`:
 
   ```python
   path("api/v1/madmp/", include("rdmo_madmp_exporter.urls")),
   ```
 
-A token for machine access: `python manage.py drf_create_token <user>`.
+A token for machine access: rerun the admin script with `--create-token <user>`,
+or directly `env/bin/python manage.py drf_create_token <user>`.
 
 ### Python API
 
