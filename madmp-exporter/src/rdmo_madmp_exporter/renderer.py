@@ -24,8 +24,9 @@ authoritative documentation):
     {attribute: <rdmo path>, options: <options key>, default: <value>}
     any list-valued extract additionally accepts {join: <separator>}
     {project_field: <project object attribute>}
-    {base_attribute: <rdmo path>, name_suffix: ..., mbox_suffix: ...,
-     identifier_suffix: ..., role_template: ...}          # person specs
+    {base_attribute: <rdmo path or list of candidate paths>, name_suffix: ..., mbox_suffix: ...,
+     identifier_suffix: ..., role_template: ...}          # person specs;
+     with a list, the first candidate answering <base>/<name_suffix> wins
     {identifier: {...}, type: {...}, fallback_identifier: {...}}  # identifier specs
     {funder: {name: ..., funder_id: <identifier spec>}, grant_id: [<identifier spec>],
      funding_status: ...}                                     # funding spec
@@ -260,30 +261,45 @@ class MaDMPRenderer:
             dmp["contributor"].append(contributor)
 
     def get_person(self, spec, set_index=0, roles=None):
-        """Render a person (dmp/contact or dmp/contributor entry) from a spec."""
+        """Render a person (dmp/contact or dmp/contributor entry) from a spec.
+
+        ``base_attribute`` may be a single path or a list of candidate paths;
+        the first candidate that answers ``<base>/<name_suffix>`` wins and
+        also provides mbox/identifier (e.g. the DOI-based projects answer
+        ``project/coordination/name`` but not the catalog's DMP-contact
+        questions under ``project/data_management``).
+        """
         base_attribute = spec.get("base_attribute")
+        candidates = base_attribute if isinstance(base_attribute, list) else [base_attribute]
         name_suffix = spec.get("name_suffix", "name")
         mbox_suffix = spec.get("mbox_suffix", "mbox")
         identifier_suffix = spec.get("identifier_suffix", "identifier")
 
-        name = self.provider.get_text(f"{base_attribute}/{name_suffix}", set_index=set_index)
+        name = None
+        base = None
+        for candidate in candidates:
+            name = self.provider.get_text(
+                f"{candidate}/{name_suffix}", set_index=set_index)
+            if name:
+                base = candidate
+                break
         if not name:
             return None
 
         contributor = {"name": name}
 
-        mbox = self.provider.get_text(f"{base_attribute}/{mbox_suffix}", set_index=set_index)
+        mbox = self.provider.get_text(f"{base}/{mbox_suffix}", set_index=set_index)
         if mbox:
             contributor["mbox"] = mbox
 
         identifier = self.provider.get_text(
-            f"{base_attribute}/{identifier_suffix}", set_index=set_index)
+            f"{base}/{identifier_suffix}", set_index=set_index)
         if identifier:
             contributor["contributor_id"] = {
                 "identifier": identifier,
                 "type": self.provider.get_option(
                     self.options.get("person_id_type_options", {}),
-                    f"{base_attribute}/{identifier_suffix}_type",
+                    f"{base}/{identifier_suffix}_type",
                     set_index=set_index, default="other"),
             }
 

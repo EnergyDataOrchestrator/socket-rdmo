@@ -138,12 +138,15 @@ dmp:
   modified:
     project_field: updated
 
-  # dmp/contact — a single person spec, no role
+  # dmp/contact — a single person spec, no role.
   # Standard RDMO catalog: project/data_management carries /name and /mbox
   # (documented as equivalent to rda:dmp/contact/name and rda:dmp/contact/mbox).
-  # maDMP example catalog: project/dmp/contact
+  # maDMP example catalog: project/dmp/contact.
+  # With a list, the first candidate answering <base>/<name_suffix> wins —
+  # projects created from a DOI (edo-infra create-project-from-doi) answer
+  # project/coordination/name instead of the data_management questions.
   contact:
-    base_attribute: project/data_management
+    base_attribute: [project/data_management, project/coordination]
 
   # dmp/contributor — person specs, optionally per element of a set
   contributor:

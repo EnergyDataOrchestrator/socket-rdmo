@@ -39,8 +39,35 @@ def test_dmp_title_and_timestamps(dmp):
     assert dmp["modified"] == "2026-11-09T12:24:33.927859+00:00"
 
 
-def test_contact_absent_when_unanswered(dmp):
-    # project/data_management/{name,mbox} are NOT answered in project #4
+def test_contact_via_fallback(dmp):
+    # project/data_management/{name,mbox} are NOT answered in project #4 —
+    # the contact spec lists [project/data_management, project/coordination],
+    # so the contact resolves via the second candidate (name only, no mbox).
+    assert dmp["contact"]["name"] == "A. Koubaa"
+    assert "mbox" not in dmp["contact"]
+
+
+def test_contact_first_answered_candidate_wins():
+    # when both candidates answer <base>/name, the first listed wins
+    answers = [
+        {"attribute": "project/coordination/name", "set_index": 0,
+         "text": "Coordination Person", "value": "Coordination Person"},
+        {"attribute": "project/data_management/name", "set_index": 0,
+         "text": "Data Manager", "value": "Data Manager"},
+        {"attribute": "project/data_management/mbox", "set_index": 0,
+         "text": "dm@example.org", "value": "dm@example.org"},
+    ]
+    renderer = MaDMPRenderer(load_mapping(), FakeExport(answers))
+    contact = renderer.get_person(load_mapping()["dmp"]["contact"])
+    assert contact == {
+        "name": "Data Manager", "mbox": "dm@example.org"}
+
+
+def test_contact_absent_when_no_candidate_answers(answers):
+    trimmed = [row for row in answers
+               if not row["attribute"].startswith("project/coordination")
+               and not row["attribute"].startswith("project/data_management")]
+    dmp = MaDMPRenderer(load_mapping(), FakeExport(trimmed)).get_dmp()
     assert "contact" not in dmp
 
 
